@@ -7,6 +7,7 @@ import Detail_Ativity from "./pages/detail_ativity";
 
 import Admin from "./pages/Admin";
 
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -15,8 +16,8 @@ export default function App() {
         <Route path="/home"  element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create" element={<Post_News />} />
-        <Route path="/detail/:id" element={<Detail_Ativity />} />
-        <Route path="/serve-ad_min@" element={<Admin />} />
+        <Route path="/detail" element={<Detail_Ativity />} />
+        <Route path="/serve-ad_min@" element={<Admin />}/>
       </Routes>
     </BrowserRouter>
   );

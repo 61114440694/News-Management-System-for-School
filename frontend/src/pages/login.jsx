@@ -1,15 +1,19 @@
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../img/02.png";
 
+import axios from "axios";
+const URL = "http://localhost:4000";
+
 export default function Login() {
+  
   const navigate = useNavigate();
 
-  const [codenumber, setCodeNumber] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  
   const updateUser = (e) => {
-    setCodeNumber(e.target.value);
+    setEmail(e.target.value);
   };
 
   const updatePassword = (e) => {
@@ -17,14 +21,26 @@ export default function Login() {
   };
 
   const Check = () => {
-    if (codenumber == "dekfupae@hotmail.com" && password == "0000000000") {
-      let Data = { id: codenumber, password: password , login : "pass"};
-
-      navigate(`home/${400}`);
-      // history.push('home/:id')
-    } else {
-      alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง");
+    const dataMember = {
+      email : Email , 
+      password : Password
     }
+    axios.post(URL + "/member/login", dataMember).then((response) => {
+      console.log(response.data.data);
+      if(response.data.data.length != 0){
+      localStorage.setItem('data',Email)
+      navigate(`/home`);
+      }
+    });
+    
+    // if (codenumber == "dekfupae@hotmail.com" && password == "0000000000") {
+      
+    //   localStorage.setItem('data',"yes")
+    //   navigate(`home/${4000}`);
+    //   // history.push('home/:id')
+    // } else {
+    //   alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง");
+    // }
   };
 
   const checklogin = () => {
@@ -32,7 +48,7 @@ export default function Login() {
   };
 
   return (
-    <div class="h-screen Classroom">
+    <div class="h-screen">
       <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
           <div>
@@ -41,7 +57,7 @@ export default function Login() {
               Login to your account
             </h2>
           </div>
-          <form onSubmit={checklogin} class="mt-8 space-y-6">
+          {/* <form onSubmit={checklogin} class="mt-8 space-y-6"> */}
             <input type="hidden" name="remember" value="true" />
             <div class="rounded-md shadow-sm -space-y-px">
               <div>
@@ -98,6 +114,7 @@ export default function Login() {
             <div>
               <button
                 type="submit"
+                onClick={checklogin}
                 class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 <span class="absolute left-0 inset-y-0 flex items-center pl-3">
@@ -119,7 +136,7 @@ export default function Login() {
                 Login
               </button>
             </div>
-          </form>
+          {/* </form> */}
         </div>
       </div>
       <div>

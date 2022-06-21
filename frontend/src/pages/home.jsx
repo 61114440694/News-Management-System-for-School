@@ -5,10 +5,20 @@ import Appbar from "../components/Appbar";
 import moment from "moment";
 // import CardButton from "../components/CardsButton";
 
+import BtnCreatePost from "../components/BtnCreatePost";
+
 const URL = "http://localhost:4000";
 
 export default function home() {
+  const [User, setUser] = useState();
+  const [data, setData] = useState([]);
+
   useEffect(() => {
+    if (!localStorage.getItem("data")) {
+      navigate(`/login`);
+    }
+    setUser(localStorage.getItem("data"));
+
     axios.get(URL + "/create_post").then((response) => {
       console.log(response.data.data);
       setData(response.data.data);
@@ -21,9 +31,8 @@ export default function home() {
     // }
 
     // axios.post(URL+'/home',data)
-
   }, []);
-  
+
   const navigate = useNavigate();
   const getDaysDiff = (start_date, end_date, date_format = "YYYY-MM-DD") => {
     const getDateAsArray = (date) => {
@@ -34,43 +43,33 @@ export default function home() {
     );
   };
 
-  const [data, setData] = useState([]);
-  
+  // const CreatePost = () => {
+  //   navigate("/create");
+  // };
 
-  const CreatePost = () => {
-    navigate("/create");
+  const GotoDetail = (e) => {
+    // navigate(`/detail`);
+   console.log(e.path)
   };
-
-  const GotoDetail = () =>{
-    
-    // navigate(``)
-  }
 
   return (
     <div>
-      <div>
+      <div className="fixed-top">
         <Appbar />
       </div>
-      <div class="flex flex-col justify-center pt-[1rem] pb-[2rem] pl-[10rem] pr-[10rem] bg-blue-200 min-h-screen min-w-screen">
+      <div class="flex flex-col justify-center pt-[1rem] pb-[2rem] pl-[10rem] pr-[10rem] min-h-screen min-w-screen">
         <div class="text-[2.5rem] text-blue-gray-700">
-          <h1>ใกล้ครบกำหนดการ</h1> 
+          <h1>ล่าสุด</h1>
         </div>
-        <div class="grid grid-cols-3 gap-8 pt-5">
-          {/* {data.length != 0 ? (<></>):(<>ยังไม่มีข้อมูลที่หมด</>)} */}
-        </div>
-
-        <div class="text-[2.5rem] text-blue-gray-700">
-          <h1>ประชาสัมพันธ์</h1>
-        </div>
-        <div class="grid grid-cols-3 gap-8 pt-5">
+        <div class="flex flex-row space-x-10">
           {/* <CardButton DATA={data} /> */}
 
           {data.length != 0 ? (
             data.map((items, index) => (
-              <div key={index} class="justify-center ">
+              <div key={index} class="flex justify-start ">
                 <div class=" shadow-lg bg-white max-w-sm rounded-lg w-auto h-auto">
                   <button
-                    onClick={GotoDetail}
+                    onClick={()=>{navigate(`/detail`,{state:items.id})}}
                     data-mdb-ripple="true"
                     data-mdb-ripple-color="light"
                   >
@@ -96,10 +95,15 @@ export default function home() {
           )}
         </div>
       </div>
-      <div class="p-10 flex justify-end fixed-bottom">
+
+      <BtnCreatePost />
+      
+      {/* button ลิ้งไปหน้า create_post */}
+
+      {/* <div class="p-10 flex justify-end fixed-bottom">
         <button
           onClick={CreatePost}
-          class="p-8 bg-sky-500 shadow-md  rounded-[20rem]"
+          class="p-8 bg-gradient-to-t from-sky-400 to-sky-600 hover:bg-gradient-to-t hover:from-sky-500 shadow-md active:bg-white  rounded-[20rem]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +118,8 @@ export default function home() {
             />
           </svg>
         </button>
-      </div>
+      </div> */}
+      
     </div>
   );
 }

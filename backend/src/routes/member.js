@@ -4,8 +4,8 @@ const express = require('express')
 const router = express.Router()
 
 // import UserController from '../controllers/users/UserController'
-const HomeController = require('../controllers/home/HomeController')
+const MemberController = require('../controllers/member/MemberController')
 
-router.use('/home', HomeController)
+router.use(`/member`, MemberController)
 
 module.exports = router

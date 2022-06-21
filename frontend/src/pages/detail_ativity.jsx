@@ -1,64 +1,55 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Appbar from "../components/Appbar";
 
-const props = [
-  {
-    title: "กินผักกันเถอะ !! การกินผักดีต่อสุขภาพนะเด็ก",
-    images:
-      "https://www.enjoyyourcooking.com/wp-content/uploads/2009/02/russian-salad-olivier.jpg",
-    titledetail:
-      "กิจกรรมร่วมกิน กิจกรรมร่วมกิน กิจกรรมร่วมกิน กิจกรรมร่วมกิน กิจกรรมร่วมกิน กิจกรรมร่วมกิน กิจกรรมร่วมกิน กิจกรรมร่วมกิน กิจกรรมร่วมกิน",
-    data: [
-      {
-        images:
-          "https://th-thumbnailer.cdn-si-edu.com/ZpquVRmBxUN5YjKXOE6CIzjhviE=/fit-in/1072x0/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/ea/a1/eaa14308-a056-4994-9e7f-f31563b888aa/cerkce.jpg",
-        name: "pop-up",
-        date: "20/05/22",
-        comment: "สสัดผักอร่อย",
-      },
-      {
-        images:
-          "https://images.unsplash.com/photo-1535591273668-578e31182c4f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjM2NTI5fQ",
-        name: "boom",
-        date: "20/05/22",
-        comment: "อร่อยจริงๆหรอครับ",
-      },
-      {
-        images:
-          "https://radiumwatch.com/wp-content/uploads/2020/03/11626137131689.jpg",
-        name: "cater",
-        date: "20/05/22",
-        comment: "อร่อยหรอครับ",
-      },
-    ],
-  },
-];
+const URL = "http://localhost:4000";
 
 export default function ActivityDetail() {
   const location = useLocation();
-  console.log(location);
+  const [Data, setData] = useState([]);
+  const dataMember = {
+    data: location.state,
+  };
+
+  useEffect(() => {
+    axios.post(URL + "/create_post/detail", dataMember).then((response) => {
+      console.log(response.data.data);
+      setData(response.data.data);
+    });
+  }, []);
 
   return (
     <div class="bg-blue-200">
-      <div class="shadow-lg bg-white">
-        <div>
-          <Appbar />
-        </div>
-        {props.map((items) => (
-          <div class="p-10 pl-[10rem] pr-[10rem]">
-            <h1 class="text-5xl font-extrabold">{items.title}</h1>
-            <div class="pt-10 w-auto">
-              <img class=" w-[100rem] h-[50rem]" src={items.images} alt="#" />
+      <div className="fixed-top">
+        <Appbar />
+      </div>
+      <div class="bg-white">
+        {Data.map((items, index) => (
+          <>
+            <div class="flex flex-col mt-[7rem] ml-[15rem] mr-[15rem]">
+              <img
+                class=" w-auto h-[40rem]"
+                src={items.imageURL}
+                alt="image err"
+              />
             </div>
-            <div class="pt-10 pb-10 p-2">
-              <span class="text-2xl font-sans font-medium">
-                {items.titledetail}
-              </span>
+            <div class="ml-[15rem] mr-[15rem] p-2">
+                <h5 class="text-[3.5rem] font-bold">{items.header}</h5>
             </div>
-
-            <div class="w-full p-5 border-black border rounded">
-              {items.data.map((items) => (
+            <div class="mr-[15rem] ml-[15rem] p-2">
+              <h1 class="text-justify text-[1.7rem] font-sans">
+                {items.description}
+              </h1>
+            </div>
+            <div class="mr-[15rem] ml-[15rem] p-2">
+              <p>โพสต์โดย : id ที่โพสต์</p>
+            </div>
+            <div class="mr-[15rem] ml-[15rem] p-2">
+              <p>วันที่โพสต์ {items.start_time}</p>
+            </div>
+            {/* <div class="w-full p-5 border-black border rounded">
+              {items.data.map((items , index) => (
                 <div>
                   <div class="flex spce">
                     <div class="p-2">
@@ -76,8 +67,8 @@ export default function ActivityDetail() {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
+            </div> */}
+          </>
         ))}
       </div>
     </div>

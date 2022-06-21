@@ -7,6 +7,7 @@ const CreatePostModel = require('../../models/CreatePostModel')
 
 const responseCode = require('../../configs/responseCode')
 const CreatePostDecorator = require('../../decorators/CreatePostDecorator')
+const { request } = require('express')
 
 const router = express.Router()
 
@@ -32,6 +33,14 @@ router.post('/', async (request, response, next) => {
     const createpostModel = await CreatePostModel(request.body).save()
     const decorator = await CreatePostDecorator.Decorator(createpostModel)
     response.json({code: responseCode.SUCCESS, message: 'success', data: decorator})
+})
+
+router.post('/detail',async (request , response, next)=>{
+  console.log(request.body.data)
+  const data = await CreatePostModel.find({_id:request.body.data})
+  const decorator = data.map((item)=> CreatePostDecorator.Decorator(item))
+  response.json({code: responseCode.SUCCESS, message: 'success', data: decorator})
+
 })
 
 // router.patch()

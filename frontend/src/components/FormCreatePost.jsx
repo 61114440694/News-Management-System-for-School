@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Appbar from "../components/Appbar";
 import Moment from "moment";
 import Select from "react-select";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -11,12 +10,12 @@ const URL = "http://localhost:4000";
 
 const data = [
   {
-    value: "ครู",
-    label: "ครู",
+    value: "ข่าวทั่วไป",
+    label: "ข่าวทั่วไป",
   },
   {
-    value: "นักเรียน",
-    label: "นักเรียน",
+    value: "ข่าวกีฬา",
+    label: "ข่าวกีฬา",
   },
   // {
   //   value: "true red",
@@ -36,134 +35,125 @@ const data = [
   // },
 ];
 
-export default function TeacherCreate() {
-  const Navigate = useNavigate();
+export default function FormCreatePost() {
+    const Navigate = useNavigate();
 
-  const [headerValue, setHeaderValue] = useState();
-  const [textbodyValue, setTextbodyValue] = useState();
-  const [urlValue, seturlValue] = useState();
-  const [datestartValue, setDateStartValue] = useState();
-  const [dateendValue, setDateEndValue] = useState();
-  const [selectedValue, setSelectedValue] = useState([]);
-
-  const [progress, setProgress] = useState();
-  const formatDate = Moment().format("YYYY-MM-DD");
-
-  const ChangeHeader = (e) => {
-    setHeaderValue(e.target.value);
-  };
-
-  const ChangeTextBody = (e) => {
-    setTextbodyValue(e.target.value);
-  };
-
-  const filechange = (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    PostToDatabase(file);
-  };
-
-  const PostToDatabase = (file) => {
-    if (!file) return;
-    const storageRef = ref(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const prog = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(prog);
-      },
-      (err) => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          seturlValue(url);
-        });
-      }
-    );
-  };
-
-  const DateStartChange = (e) => {
-    setDateStartValue(e.target.value);
-  };
-  const DateEndChange = (e) => {
-    setDateEndValue(e.target.value);
-  };
-
-  const ChangeSelect = (e) => {
-    setSelectedValue(Array.isArray(e) ? e.map((x) => x.value) : []);
-  };
-
-  const post = () => {
-    if(!urlValue){
-alert("no pass")
-    }else{
-      alert("ทำการโพสต์สำเร็จแล้ว")
-      console.log(
-        "header: " +
-          " " +
-          JSON.stringify(headerValue) +
-          " " +
-          "textbody: " +
-          " " +
-          JSON.stringify(textbodyValue) +
-          " " +
-          "images: " +
-          " " +
-          JSON.stringify(urlValue) +
-          " " +
-          "datestart: " +
-          " " +
-          JSON.stringify(datestartValue) +
-          " " +
-          "dateend: " +
-          " " +
-          JSON.stringify(dateendValue) +
-          " " +
-          "type: " +
-          JSON.stringify(selectedValue, null, 2)
+    const [headerValue, setHeaderValue] = useState();
+    const [textbodyValue, setTextbodyValue] = useState();
+    const [urlValue, seturlValue] = useState();
+    const [datestartValue, setDateStartValue] = useState();
+    const [dateendValue, setDateEndValue] = useState();
+    const [selectedValue, setSelectedValue] = useState([]);
+  
+    const [progress, setProgress] = useState();
+    const formatDate = Moment().format("YYYY-MM-DD");
+  
+    const ChangeHeader = (e) => {
+      setHeaderValue(e.target.value);
+    };
+  
+    const ChangeTextBody = (e) => {
+      setTextbodyValue(e.target.value);
+    };
+  
+    const filechange = (e) => {
+      e.preventDefault();
+      const file = e.target.files[0];
+      PostToDatabase(file);
+    };
+  
+    const PostToDatabase = (file) => {
+      if (!file) return;
+      const storageRef = ref(storage, `/files/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+  
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const prog = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(prog);
+        },
+        (err) => console.log(err),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            seturlValue(url);
+          });
+        }
       );
-      const Alldata = {
-        header: headerValue,
-        description:textbodyValue,
-        imageURL: urlValue,
-        start_time: datestartValue,
-        end_time: dateendValue,
-        seepost: selectedValue,
-      }; 
-      axios.post(URL+'/create_post',Alldata) 
-      Navigate("/home"); 
-    }
-    
- 
-    // Upload Database Mongodb 
-    // const data = {
-    //   name: 'test02',
-    //   email: 'test02@gmail.com',
-    //   age:'1000'
-    // }
+    };
+  
+    const DateStartChange = (e) => {
+      setDateStartValue(e.target.value);
+    };
+    const DateEndChange = (e) => {
+      setDateEndValue(e.target.value);
+    };
+  
+    const ChangeSelect = (e) => {
+      setSelectedValue(Array.isArray(e) ? e.map((x) => x.value) : []);
+    };
+  
+    const post = () => {
+      if(!urlValue){
+  alert("no pass")
+      }else{
+        alert("ทำการโพสต์สำเร็จแล้ว")
+        console.log(
+          "header: " +
+            " " +
+            JSON.stringify(headerValue) +
+            " " +
+            "textbody: " +
+            " " +
+            JSON.stringify(textbodyValue) +
+            " " +
+            "images: " +
+            " " +
+            JSON.stringify(urlValue) +
+            " " +
+            "datestart: " +
+            " " +
+            JSON.stringify(datestartValue) +
+            " " +
+            "dateend: " +
+            " " +
+            JSON.stringify(dateendValue) +
+            " " +
+            "type: " +
+            JSON.stringify(selectedValue, null, 2)
+        );
+        const Alldata = {
+          header: headerValue,
+          description:textbodyValue,
+          imageURL: urlValue,
+          start_time: datestartValue,
+          end_time: dateendValue,
+          seepost: selectedValue,
+        }; 
+        axios.post(URL+'/create_post',Alldata) 
+        Navigate("/home"); 
+      }
+      
+   
+      // Upload Database Mongodb 
+      // const data = {
+      //   name: 'test02',
+      //   email: 'test02@gmail.com',
+      //   age:'1000'
+      // }
+  
+      // axios.post(URL+'/home',data)
+    };
+  
+    const back = () => {
+      Navigate("/home");
+    };
 
-    // axios.post(URL+'/home',data)
-  };
-
-  const back = () => {
-    Navigate("/home");
-  };
   return (
-    <div>
-      <div>
-        <div>
-          <Appbar></Appbar>
-        </div>
-        <div class="pt-[5rem] pb-[5rem] pl-[20rem] pr-[20rem] bg-blue-200 h-full">
-          <div class="h-auto bg-white p-10 shadow-xl ">
-            <div class="text-5xl">
-              <b>สร้างโพสต์</b>
-            </div>
-            <div class="p-10">
-              <form onSubmit={post}>
+    <>
+    {/* <form onSubmit={post}> */}
               <div class="flex flex-col justify-center">
                 <div class="flex justify-center">
                   <div class="mb-3 xl:w-[30rem]">
@@ -261,7 +251,7 @@ alert("no pass")
                       for="formFile"
                       class="form-label inline-block mb-2 text-gray-700"
                     >
-                      คนที่มองเห็นโพสต์ได้
+                      ประเภทข่าว
                     </label>
 
                     <div class="flex justify-center">
@@ -284,29 +274,26 @@ alert("no pass")
                 </div>
               </div>
 
-              <div class="flex justify-center p-5 pt-[2rem]">
+              <div class="flex justify-center p-5 -mt-3 -mb-3">
                 <button
                   onClick={post}
                   type="submit"
-                  class=" border-transparent text-md font-medium rounded-md text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 w-[10rem] h-[3rem] border-2 shadow-xl rounded-lg  p-1.5"
+                  class=" border-transparent text-md font-medium  text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 w-[10rem] h-[3rem] border-2 shadow-xl rounded-lg  p-1.5"
                 >
                   <b>โพสต์</b>
                 </button>
               </div>
-              </form>
+              {/* </form> */}
 
-              <div class="flex justify-center">
+              <div class="flex justify-center p-5">
                 <button
-                  onClick={back}
-                  class=" border-transparent text-md font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 w-[10rem] h-[3rem] border-2 shadow-xl rounded-lg  p-1.5"
+                  onClick={post}
+                  type="submit"
+                  class=" border-transparent text-md font-medium  text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 w-[10rem] h-[3rem] border-2 shadow-xl rounded-lg  p-1.5"
                 >
                   <b>ถอยกลับ</b>
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    </>
+  )
 }
