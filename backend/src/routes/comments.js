@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router()
 
-const MemberController = require('../controllers/member/MemberController')
-router.use(`/member`, MemberController)
+const CommentsController = require('../controllers/comments/CommentsController')
+router.use(`/comments`, CommentsController)
 
 module.exports = router

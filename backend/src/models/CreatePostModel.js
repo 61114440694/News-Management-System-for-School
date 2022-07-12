@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const constants = require('../configs/constants')
 
 const CreatePostSchema = new mongoose.Schema({
     header: {
@@ -18,16 +17,16 @@ const CreatePostSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    end_time: {
-        type: String,
-        require: true
-    },
     seepost: {
         type: Array,
         require: true
+    },
+    useridpost:{
+        type:String,
+        require:true
     }
 
 })
 
-const CreatePostModel = mongoose.model('Create_Post', CreatePostSchema)
+const CreatePostModel = mongoose.model('create_post', CreatePostSchema)
 module.exports = CreatePostModel

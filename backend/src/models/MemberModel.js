@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const constants = require('../configs/constants')   
 
 const MemberSchema = new mongoose.Schema(
     {
@@ -16,9 +15,14 @@ const MemberSchema = new mongoose.Schema(
             require: true
         },
         status: {
-            type: Boolean,
+            type: String,
             require: true
         },
+        position: {
+            type: String,
+            require: true
+        },
+
         
     }
 )
