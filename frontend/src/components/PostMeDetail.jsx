@@ -53,7 +53,7 @@ export default function PostMeDetail() {
                               }}
                               class=" p-3 rounded-lg font-medium  hover:bg-orange-400 hover:transition hover:text-white delay-50 duration-50 "
                             >
-                              edit
+                              แก้ไข
                             </button>
                             <button
                             onClick={() => {
@@ -65,7 +65,7 @@ export default function PostMeDetail() {
                               window.location.reload();
                             }}
                             class="bg-red-500 p-3 rounded-lg font-medium hover:bg-red-600  hover:transition hover:text-white delay-50 duration-50">
-                              delete
+                              ลบ
                             </button>
                           </td>
                         </tr>
